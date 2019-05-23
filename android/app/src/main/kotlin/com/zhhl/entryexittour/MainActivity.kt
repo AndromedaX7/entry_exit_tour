@@ -19,7 +19,7 @@ import com.uuzuche.lib_zxing.activity.CodeUtils
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugins.GeneratedPluginRegistrant
+import io.flutter.plugin.common.PluginRegistry
 import java.io.File
 
 class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
@@ -66,7 +66,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         super.onCreate(savedInstanceState)
         transparentStatus((Color.WHITE))
         GeneratedPluginRegistrant.registerWith(this)
-        StoragePlugin.registerWith(this,flutterView)
+        StoragePlugin.registerWith(this, flutterView)
         LocalPlugin.registerWith(this, flutterView, this)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), permissionRequestCamera)
@@ -131,5 +131,22 @@ fun Activity.transparentStatus() {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.statusBarColor = Color.TRANSPARENT;
         }
+    }
+}
+
+object GeneratedPluginRegistrant {
+    fun registerWith(registry: PluginRegistry) {
+        if (alreadyRegisteredWith(registry)) {
+            return
+        }
+    }
+
+    private fun alreadyRegisteredWith(registry: PluginRegistry): Boolean {
+        val key = GeneratedPluginRegistrant::class.java.canonicalName
+        if (registry.hasPlugin(key)) {
+            return true
+        }
+        registry.registrarFor(key)
+        return false
     }
 }
